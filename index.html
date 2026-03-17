@@ -9,388 +9,471 @@
         :root {
             --neon-green: #00FF00;
             --neon-blue: #00F0FF;
-            --neon-red: #FF0033;
-            --dark-bg: #020502;
-            --hud-border: rgba(0, 255, 0, 0.2);
+            --dark-bg: #050a05;
+            --card-bg: rgba(0, 0, 0, 0.7);
+            --input-bg: #000;
         }
 
         * { box-sizing: border-box; }
 
         body {
             background-color: var(--dark-bg);
-            color: var(--neon-green);
-            font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
             margin: 0;
-            overflow: hidden;
-            perspective: 1000px;
-        }
-
-        /* --- HIGH TECH BACKGROUND EFFECTS --- */
-        .cyber-grid {
-            position: fixed;
-            top: 0; left: 0; width: 200%; height: 200%;
-            background-image: 
-                linear-gradient(var(--hud-border) 1px, transparent 1px),
-                linear-gradient(90deg, var(--hud-border) 1px, transparent 1px);
-            background-size: 50px 50px;
-            transform: rotateX(60deg) translateY(-50%);
-            animation: grid-scroll 20s linear infinite;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        @keyframes grid-scroll {
-            from { background-position: 0 0; }
-            to { background-position: 0 1000px; }
-        }
-
-        .scanlines {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(
-                to bottom,
-                rgba(18, 16, 16, 0) 50%,
-                rgba(0, 0, 0, 0.2) 50%
-            );
-            background-size: 100% 4px;
-            z-index: 10;
-            pointer-events: none;
-            opacity: 0.3;
-        }
-
-        /* --- HUD CONTAINER --- */
-        .hud-wrapper {
-            position: relative;
-            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             padding: 20px;
-            width: 100%;
-            max-width: 800px;
+            background-image: radial-gradient(circle at top, #001a00 0%, #050a05 100%);
         }
-
-        .hud-wrapper::before, .hud-wrapper::after {
-            content: "";
-            position: absolute;
-            width: 50px; height: 50px;
-            border: 2px solid var(--neon-green);
-            z-index: -1;
-        }
-        .hud-wrapper::before { top: 0; left: 0; border-right: 0; border-bottom: 0; }
-        .hud-wrapper::after { bottom: 0; right: 0; border-left: 0; border-top: 0; }
 
         .hud-container {
-            background: rgba(0, 15, 0, 0.9);
-            padding: 40px;
-            border: 1px solid var(--neon-green);
-            box-shadow: 0 0 30px rgba(0, 255, 0, 0.15), inset 0 0 20px rgba(0, 255, 0, 0.05);
-            max-height: 90vh;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: var(--neon-green) transparent;
+            width: 100%;
+            max-width: 650px;
+            padding-bottom: 200px;
         }
 
         .header {
             text-align: center;
-            border-bottom: 1px double var(--neon-green);
-            margin-bottom: 30px;
-            padding-bottom: 15px;
+            margin-bottom: 20px;
         }
 
-        .header h1 {
-            margin: 0;
-            font-size: 1.6rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
+        .header h1 { 
+            margin: 0; 
+            letter-spacing: 4px; 
+            font-size: 1.4rem; 
+            color: var(--neon-green);
             text-shadow: 0 0 10px var(--neon-green);
         }
 
-        .header .sub {
-            font-size: 0.75rem;
+        .btn-tutorial {
+            background: transparent;
+            border: 1px solid var(--neon-blue);
             color: var(--neon-blue);
-            letter-spacing: 5px;
-            margin-top: 5px;
-            display: block;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            margin-top: 10px;
             font-weight: bold;
+            text-transform: uppercase;
         }
 
-        .form-group { margin-bottom: 18px; }
+        #tutorialModal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+        }
 
-        label {
-            display: block;
+        .tutorial-content {
+            max-width: 500px;
+            margin: 40px auto;
+            background: #111;
+            border: 2px solid var(--neon-green);
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .tutorial-step { margin-bottom: 25px; }
+        .tutorial-step h3 { color: var(--neon-green); margin-bottom: 5px; }
+        .tutorial-step p { color: #ccc; font-size: 0.9rem; line-height: 1.4; }
+
+        .section-step {
+            margin-bottom: 30px;
+        }
+
+        .step-label {
             font-size: 0.65rem;
-            margin-bottom: 6px;
-            text-transform: uppercase;
             color: var(--neon-blue);
-            letter-spacing: 1px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(0, 255, 0, 0.2);
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .input-group { margin-bottom: 15px; }
+
+        label { 
+            display: block; 
+            font-size: 0.7rem; 
+            margin-bottom: 5px; 
+            color: #aaa;
         }
 
         input, textarea, select {
             width: 100%;
-            background: rgba(0, 30, 0, 0.5);
-            border: 1px solid var(--hud-border);
-            color: var(--neon-green);
-            padding: 12px;
-            font-family: 'Courier New', monospace;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        input:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 240, 255, 0.2); }
-
-        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-
-        .traits-list {
-            max-height: 200px;
-            overflow-y: auto;
-            margin-bottom: 15px;
-            border: 1px solid rgba(0, 240, 255, 0.1);
+            background: var(--input-bg);
+            border: 1px solid #333;
+            color: #fff;
             padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
         }
 
-        .trait-row {
+        .variety-box {
+            background: rgba(0, 240, 255, 0.03);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+
+        .variety-row {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 8px;
+        }
+
+        .btn-icon {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            width: 32px; height: 32px;
+            cursor: pointer; border-radius: 5px;
         }
 
         .btn-add {
             background: transparent;
-            color: var(--neon-blue);
             border: 1px dashed var(--neon-blue);
-            padding: 8px;
-            width: 100%;
-            cursor: pointer;
-            font-size: 0.7rem;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-        .btn-add:hover { background: rgba(0, 240, 255, 0.1); }
-
-        .btn-del {
-            background: rgba(255, 0, 0, 0.1);
-            color: var(--neon-red);
-            border: 1px solid var(--neon-red);
-            cursor: pointer;
-            padding: 0 12px;
-        }
-
-        .preview-pane {
-            background: #000;
-            border: 1px solid var(--neon-blue);
-            padding: 15px;
-            font-size: 0.8rem;
-            height: 200px;
-            overflow: auto;
-            margin-top: 20px;
-            position: relative;
-        }
-
-        .preview-pane::before {
-            content: "[ PREVIEW_STREAM ]";
-            position: absolute;
-            top: 2px; right: 10px;
-            font-size: 0.55rem;
             color: var(--neon-blue);
+            width: 100%;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 0.75rem;
+        }
+
+        .preview-container {
+            margin-top: 20px;
+        }
+        .preview-label {
+            font-size: 0.6rem;
+            color: var(--neon-green);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .preview-box {
+            background: #000;
+            border: 1px solid #1a1a1a;
+            color: var(--neon-green);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.75rem;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            max-height: 250px;
+            border-left: 3px solid var(--neon-green);
+        }
+
+        .action-footer {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: rgba(0, 5, 0, 0.95);
+            border-top: 1px solid var(--neon-green);
+            padding: 20px;
+            text-align: center;
+            z-index: 10;
         }
 
         .btn-main {
             width: 100%;
-            margin-top: 30px;
-            padding: 18px;
-            background: transparent;
-            color: var(--neon-green);
-            border: 2px solid var(--neon-green);
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            cursor: pointer;
-            transition: 0.4s;
-        }
-
-        .btn-main:hover:not(:disabled) {
+            max-width: 600px;
+            padding: 15px;
             background: var(--neon-green);
-            color: #000;
-            box-shadow: 0 0 30px var(--neon-green);
-        }
-
-        .btn-main:disabled { opacity: 0.2; cursor: not-allowed; }
-
-        #status-bar {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 0.7rem;
-            color: var(--neon-blue);
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
             text-transform: uppercase;
         }
 
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--neon-blue); }
+        .btn-main:disabled { background: #222; color: #555; }
+
+        .math-status {
+            font-size: 0.7rem;
+            margin-top: 8px;
+            color: var(--neon-green);
+        }
+        
+        .error-border { border-color: #ff4444 !important; }
+
+        .media-notice {
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            margin-top: 10px;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
 
-<div class="cyber-grid"></div>
-<div class="scanlines"></div>
-
-<div class="hud-wrapper">
-    <div class="hud-container">
-        <div class="header">
-            <h1>XRPMAN'S MUSIC NFT METADATA</h1>
-            <span class="sub">POWERED BY XMEME</span>
+<div id="tutorialModal">
+    <div class="tutorial-content">
+        <h2 style="color: var(--neon-blue); margin-top:0;">🚀 Artist Quick Start</h2>
+        <div class="tutorial-step">
+            <h3>1. The Batch</h3>
+            <p>Set your "Batch Size" (e.g., 100). All your quantities must add up to this number.</p>
         </div>
-
-        <div class="row">
-            <div class="form-group">
-                <label>Asset Identity (Name)</label>
-                <input type="text" id="name" placeholder="Redcandlekiller ai">
-            </div>
-            <div class="form-group">
-                <label>Collection Name</label>
-                <input type="text" id="collection" placeholder="HAVE">
-            </div>
+        <div class="tutorial-step">
+            <h3>2. Media Folder</h3>
+            <p>The ZIP you download will have a <b>media</b> folder. Once you download, move your actual image/video files into that folder before uploading to a marketplace.</p>
         </div>
-
-        <div class="form-group">
-            <label>Description Data</label>
-            <textarea id="description" rows="2" placeholder="NFT_DESCRIPTION_HERE"></textarea>
+        <div class="tutorial-step">
+            <h3>3. Live Preview</h3>
+            <p>Look at the bottom of the page. You'll see exactly what your first NFT's code looks like in bright green!</p>
         </div>
-
-        <div class="row">
-            <div class="form-group">
-                <label>Image Prefix</label>
-                <input type="text" id="imgPrefix" placeholder="Xrpman">
-            </div>
-            <div class="form-group">
-                <label>Extension</label>
-                <select id="ext">
-                    <option value=".png">.PNG</option>
-                    <option value=".gif">.GIF</option>
-                    <option value=".mp4">.MP4</option>
-                    <option value=".webp">.WEBP</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Audio Source (IPFS/URL)</label>
-            <input type="text" id="audio" placeholder="ipfs://...">
-        </div>
-
-        <label>Attribute Protocols</label>
-        <div id="traits-list" class="traits-list"></div>
-        <button class="btn-add" id="addTrait">+ INITIALIZE NEW TRAIT</button>
-
-        <div class="form-group">
-            <label>Quantity to Generate</label>
-            <input type="number" id="count" min="1" placeholder="0">
-        </div>
-
-        <div class="preview-pane">
-            <pre id="jsonPreview"></pre>
-        </div>
-
-        <button id="genBtn" class="btn-main" disabled>EXECUTE BATCH DOWNLOAD</button>
-        <div id="status-bar">SYSTEM_READY</div>
+        <button class="btn-main" onclick="closeTutorial()">GOT IT - LET'S GO</button>
     </div>
 </div>
 
-<script>
-    const container = document.getElementById('traits-list');
-    const staticFields = ['name', 'description', 'imgPrefix', 'ext', 'audio', 'collection', 'count'];
+<div class="hud-container">
+    <div class="header">
+        <h1>XRPMAN'S CREATOR</h1>
+        <button class="btn-tutorial" onclick="openTutorial()">📖 HOW DOES THIS WORK?</button>
+    </div>
 
-    function addTraitRow() {
+    <div class="section-step">
+        <div class="step-label">Step 1: The Collection</div>
+        <div class="card">
+            <div class="input-group">
+                <label>Project Name</label>
+                <input type="text" id="name" placeholder="e.g. My First Drop" oninput="updatePreview()">
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="input-group">
+                    <label>Batch Size</label>
+                    <input type="number" id="count" value="10" oninput="validateAll()">
+                </div>
+                <div class="input-group">
+                    <label>Collection Name</label>
+                    <input type="text" id="collection" placeholder="Optional" oninput="updatePreview()">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Global Description</label>
+                <textarea id="description" rows="2" placeholder="Tell the story..." oninput="updatePreview()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-step">
+        <div class="step-label">Step 2: Music Links</div>
+        <div class="card" id="audio-card">
+            <div id="audio-list"></div>
+            <button class="btn-add" onclick="addAudioRow()">+ Add Rare/Alternative Song</button>
+            <div id="audio-math" class="math-status">Assigned: 0 / 10</div>
+            
+            <div style="margin-top: 20px;">
+                <label>Image Prefix</label>
+                <input type="text" id="imgPrefix" placeholder="Art_" oninput="updatePreview()">
+            </div>
+            <div class="media-notice">
+                <b>Note:</b> After downloading, place your actual image/video files (matching the prefix) into the <b>/media</b> folder.
+            </div>
+        </div>
+    </div>
+
+    <div class="section-step">
+        <div class="step-label">Step 3: Rarity Details</div>
+        <div id="traits-container"></div>
+        <button class="btn-add" style="border-style: solid; border-color: var(--neon-green); color: var(--neon-green);" onclick="addTraitBox()">+ Add A Detail</button>
+    </div>
+
+    <div class="preview-container">
+        <div class="preview-label">Live Metadata Preview (NFT #1)</div>
+        <div class="preview-box" id="json-preview">{}</div>
+    </div>
+</div>
+
+<div class="action-footer">
+    <button id="genBtn" class="btn-main" disabled>DOWNLOAD ZIP</button>
+    <div id="statusText" class="math-status">Please fix quantities to match Batch Size</div>
+</div>
+
+<script>
+    function openTutorial() { document.getElementById('tutorialModal').style.display = 'block'; }
+    function closeTutorial() { document.getElementById('tutorialModal').style.display = 'none'; }
+
+    function addAudioRow() {
         const row = document.createElement('div');
-        row.className = 'trait-row';
+        row.className = 'variety-row';
         row.innerHTML = `
-            <input type="text" class="t-type" placeholder="Type (Head)">
-            <input type="text" class="t-val" placeholder="Value (Ugly)">
-            <button class="btn-del">X</button>
+            <input type="text" class="audio-url" placeholder="ipfs://..." oninput="updatePreview()">
+            <input type="number" class="audio-qty" placeholder="Qty" style="width: 70px;" oninput="validateAll()">
+            <button class="btn-icon" onclick="this.parentElement.remove(); validateAll();">✕</button>
         `;
-        row.querySelectorAll('input').forEach(i => i.addEventListener('input', updateUI));
-        row.querySelector('.btn-del').addEventListener('click', () => {
-            row.remove();
-            updateUI();
-        });
-        container.appendChild(row);
-        updateUI();
+        document.getElementById('audio-list').appendChild(row);
+        validateAll();
     }
 
-    /**
-     * getMetadata defines the object order explicitly 
-     * by creating keys in the specific sequence requested.
-     */
-    function getMetadata(idx) {
-        // Build attributes array
-        const traits = [];
-        document.querySelectorAll('.trait-row').forEach(r => {
-            const type = r.querySelector('.t-type').value;
-            const val = r.querySelector('.t-val').value;
-            if (type || val) {
-                traits.push({ "trait_type": type, "value": val });
+    function addTraitBox() {
+        const box = document.createElement('div');
+        box.className = 'variety-box';
+        box.innerHTML = `
+            <div style="display:flex; gap:10px; margin-bottom:10px;">
+                <input type="text" class="t-name" placeholder="Detail Name" oninput="updatePreview()">
+                <button class="btn-icon" onclick="this.closest('.variety-box').remove(); validateAll();">✕</button>
+            </div>
+            <div class="v-list"></div>
+            <button class="btn-add" onclick="addVarietyRow(this)">+ Add Value Variety</button>
+            <div class="math-status trait-math">Assigned: 0 / 0</div>
+        `;
+        document.getElementById('traits-container').appendChild(box);
+        addVarietyRow(box.querySelector('.btn-add'));
+    }
+
+    function addVarietyRow(btn) {
+        const row = document.createElement('div');
+        row.className = 'variety-row';
+        row.innerHTML = `
+            <input type="text" class="v-val" placeholder="Value" oninput="updatePreview()">
+            <input type="number" class="v-qty" placeholder="Qty" style="width: 70px;" oninput="validateAll()">
+            <button class="btn-icon" onclick="this.parentElement.remove(); validateAll();">✕</button>
+        `;
+        btn.previousElementSibling.appendChild(row);
+        validateAll();
+    }
+
+    function updatePreview() {
+        const projName = document.getElementById('name').value || "Project Name";
+        const desc = document.getElementById('description').value || "";
+        const prefix = document.getElementById('imgPrefix').value || "Art_";
+        const coll = document.getElementById('collection').value || "";
+        
+        const firstAudio = document.querySelector('.audio-url')?.value || "ipfs://...";
+        
+        const attrs = [];
+        document.querySelectorAll('.variety-box').forEach(box => {
+            const tName = box.querySelector('.t-name').value || "Trait Name";
+            const firstVal = box.querySelector('.v-val')?.value || "Value";
+            attrs.push({ trait_type: tName, value: firstVal });
+        });
+
+        const previewObj = {
+            name: `${projName} #1`,
+            description: desc,
+            image: `media/${prefix}1.png`,
+            audio: firstAudio,
+            collection: coll ? { name: coll } : undefined,
+            attributes: attrs,
+            compiler: "XRPMAN XMEME CREATOR"
+        };
+
+        document.getElementById('json-preview').textContent = JSON.stringify(previewObj, null, 4);
+        validateAll();
+    }
+
+    function validateAll() {
+        const target = parseInt(document.getElementById('count').value) || 0;
+        let valid = true;
+
+        let aTotal = 0;
+        document.querySelectorAll('.audio-qty').forEach(i => aTotal += parseInt(i.value) || 0);
+        document.getElementById('audio-math').textContent = `Assigned Songs: ${aTotal} / ${target}`;
+        if(aTotal !== target) {
+            valid = false;
+            document.getElementById('audio-card').classList.add('error-border');
+        } else {
+            document.getElementById('audio-card').classList.remove('error-border');
+        }
+
+        document.querySelectorAll('.variety-box').forEach(box => {
+            let tTotal = 0;
+            box.querySelectorAll('.v-qty').forEach(i => tTotal += parseInt(i.value) || 0);
+            box.querySelector('.trait-math').textContent = `Assigned Details: ${tTotal} / ${target}`;
+            if(tTotal !== target) {
+                valid = false;
+                box.classList.add('error-border');
+            } else {
+                box.classList.remove('error-border');
             }
         });
 
-        // We create a fresh object and add keys in order.
-        // JS engines generally maintain this "insertion order" for string keys.
-        const meta = {};
-        meta.name = `${document.getElementById('name').value} #${idx}`;
-        meta.description = document.getElementById('description').value;
-        meta.image = `${document.getElementById('imgPrefix').value}${idx}${document.getElementById('ext').value}`;
-        meta.audio = document.getElementById('audio').value;
-        meta.collection = { "name": document.getElementById('collection').value };
-        meta.attributes = traits;
-
-        return meta;
-    }
-
-    function updateUI() {
-        const preview = getMetadata(1);
-        document.getElementById('jsonPreview').textContent = JSON.stringify(preview, null, 3);
-        
-        const count = document.getElementById('count').value;
         const btn = document.getElementById('genBtn');
-        btn.disabled = (!count || count < 1 || !document.getElementById('name').value);
-        
-        document.getElementById('status-bar').textContent = btn.disabled ? "AWAITING_INPUT" : "READY_FOR_SEQUENCING";
+        btn.disabled = !valid || !document.getElementById('name').value;
+        document.getElementById('statusText').textContent = valid ? "MATH MATCHES! ZIP WILL INCLUDE /MEDIA FOLDER." : "QUANTITIES MUST MATCH BATCH SIZE";
+        document.getElementById('statusText').style.color = valid ? "var(--neon-green)" : "#ff4444";
     }
-
-    staticFields.forEach(f => document.getElementById(f).addEventListener('input', updateUI));
-    document.getElementById('addTrait').addEventListener('click', addTraitRow);
-
-    // Default trait
-    addTraitRow();
 
     document.getElementById('genBtn').addEventListener('click', async () => {
-        const btn = document.getElementById('genBtn');
-        const status = document.getElementById('status-bar');
-        const count = parseInt(document.getElementById('count').value);
         const zip = new JSZip();
+        const total = parseInt(document.getElementById('count').value);
+        const projName = document.getElementById('name').value;
+        const prefix = document.getElementById('imgPrefix').value || "Art_";
+        
+        const root = zip.folder(projName.replace(/\s+/g, '_'));
+        const meta = root.folder("metadata");
+        
+        // CREATE EMPTY MEDIA FOLDER
+        root.folder("media");
 
-        btn.disabled = true;
-        status.textContent = "SEQUENCING_DATA...";
+        const audioPool = [];
+        document.querySelectorAll('#audio-list .variety-row').forEach(row => {
+            const url = row.querySelector('.audio-url').value;
+            const qty = parseInt(row.querySelector('.audio-qty').value);
+            for(let i=0; i<qty; i++) audioPool.push(url);
+        });
 
-        try {
-            for(let i=1; i<=count; i++) {
-                const data = getMetadata(i);
-                zip.file(`${i}.json`, JSON.stringify(data, null, 3));
-            }
-            const blob = await zip.generateAsync({type:"blob"});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = "XRPMAN_NFT_METADATA.zip";
-            a.click();
-            status.textContent = "TRANSMISSION_SUCCESSFUL";
-        } catch(e) {
-            status.textContent = "CRITICAL_ERROR";
-            console.error(e);
-        } finally {
-            btn.disabled = false;
+        const traitPools = [];
+        document.querySelectorAll('.variety-box').forEach(box => {
+            const name = box.querySelector('.t-name').value;
+            const pool = [];
+            box.querySelectorAll('.v-list .variety-row').forEach(row => {
+                const val = row.querySelector('.v-val').value;
+                const qty = parseInt(row.querySelector('.v-qty').value);
+                for(let i=0; i<qty; i++) pool.push({ trait_type: name, value: val });
+            });
+            traitPools.push(pool);
+        });
+
+        const shuffle = (a) => { for(let i=a.length-1; i>0; i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }};
+        shuffle(audioPool);
+        traitPools.forEach(p => shuffle(p));
+
+        for(let i=1; i<=total; i++) {
+            const item = {
+                name: `${projName} #${i}`,
+                description: document.getElementById('description')?.value || "",
+                image: `media/${prefix}${i}.png`,
+                audio: audioPool[i-1],
+                collection: document.getElementById('collection').value ? { name: document.getElementById('collection').value } : undefined,
+                attributes: traitPools.map(p => p[i-1]),
+                compiler: "XRPMAN XMEME CREATOR"
+            };
+            meta.file(`${i}.json`, JSON.stringify(item, null, 4));
         }
+
+        const content = await zip.generateAsync({type:"blob"});
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(content);
+        link.download = `${projName}.zip`;
+        link.click();
     });
+
+    addAudioRow();
+    addTraitBox();
+    updatePreview();
+    if(!localStorage.getItem('tutorialSeen')) { openTutorial(); localStorage.setItem('tutorialSeen', 'true'); }
 </script>
 
 </body>
