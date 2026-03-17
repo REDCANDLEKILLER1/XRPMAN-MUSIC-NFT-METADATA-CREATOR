@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XRPMAN'S MUSIC NFT CREATOR</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        :root {
+            --neon-green: #00FF00;
+            --neon-blue: #00F0FF;
+            --neon-red: #FF0033;
+            --dark-bg: #020502;
+            --hud-border: rgba(0, 255, 0, 0.2);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--neon-green);
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        /* --- HIGH TECH BACKGROUND EFFECTS --- */
+        .cyber-grid {
+            position: fixed;
+            top: 0; left: 0; width: 200%; height: 200%;
+            background-image: 
+                linear-gradient(var(--hud-border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--hud-border) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: rotateX(60deg) translateY(-50%);
+            animation: grid-scroll 20s linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes grid-scroll {
+            from { background-position: 0 0; }
+            to { background-position: 0 1000px; }
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(18, 16, 16, 0) 50%,
+                rgba(0, 0, 0, 0.2) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 10;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        /* --- HUD CONTAINER --- */
+        .hud-wrapper {
+            position: relative;
+            z-index: 5;
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .hud-wrapper::before, .hud-wrapper::after {
+            content: "";
+            position: absolute;
+            width: 50px; height: 50px;
+            border: 2px solid var(--neon-green);
+            z-index: -1;
+        }
+        .hud-wrapper::before { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+        .hud-wrapper::after { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+
+        .hud-container {
+            background: rgba(0, 15, 0, 0.9);
+            padding: 40px;
+            border: 1px solid var(--neon-green);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.15), inset 0 0 20px rgba(0, 255, 0, 0.05);
+            max-height: 90vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--neon-green) transparent;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 1px double var(--neon-green);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.6rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .header .sub {
+            font-size: 0.75rem;
+            color: var(--neon-blue);
+            letter-spacing: 5px;
+            margin-top: 5px;
+            display: block;
+            font-weight: bold;
+        }
+
+        .form-group { margin-bottom: 18px; }
+
+        label {
+            display: block;
+            font-size: 0.65rem;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            color: var(--neon-blue);
+            letter-spacing: 1px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            background: rgba(0, 30, 0, 0.5);
+            border: 1px solid var(--hud-border);
+            color: var(--neon-green);
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 240, 255, 0.2); }
+
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        .traits-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            padding: 10px;
+        }
+
+        .trait-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .btn-add {
+            background: transparent;
+            color: var(--neon-blue);
+            border: 1px dashed var(--neon-blue);
+            padding: 8px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 0.7rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        .btn-add:hover { background: rgba(0, 240, 255, 0.1); }
+
+        .btn-del {
+            background: rgba(255, 0, 0, 0.1);
+            color: var(--neon-red);
+            border: 1px solid var(--neon-red);
+            cursor: pointer;
+            padding: 0 12px;
+        }
+
+        .preview-pane {
+            background: #000;
+            border: 1px solid var(--neon-blue);
+            padding: 15px;
+            font-size: 0.8rem;
+            height: 200px;
+            overflow: auto;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .preview-pane::before {
+            content: "[ PREVIEW_STREAM ]";
+            position: absolute;
+            top: 2px; right: 10px;
+            font-size: 0.55rem;
+            color: var(--neon-blue);
+        }
+
+        .btn-main {
+            width: 100%;
+            margin-top: 30px;
+            padding: 18px;
+            background: transparent;
+            color: var(--neon-green);
+            border: 2px solid var(--neon-green);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+
+        .btn-main:hover:not(:disabled) {
+            background: var(--neon-green);
+            color: #000;
+            box-shadow: 0 0 30px var(--neon-green);
+        }
+
+        .btn-main:disabled { opacity: 0.2; cursor: not-allowed; }
+
+        #status-bar {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.7rem;
+            color: var(--neon-blue);
+            text-transform: uppercase;
+        }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--neon-blue); }
+    </style>
+</head>
+<body>
+
+<div class="cyber-grid"></div>
+<div class="scanlines"></div>
+
+<div class="hud-wrapper">
+    <div class="hud-container">
+        <div class="header">
+            <h1>XRPMAN'S MUSIC NFT METADATA</h1>
+            <span class="sub">POWERED BY XMEME</span>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label>Asset Identity (Name)</label>
+                <input type="text" id="name" placeholder="Redcandlekiller ai">
+            </div>
+            <div class="form-group">
+                <label>Collection Name</label>
+                <input type="text" id="collection" placeholder="HAVE">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Description Data</label>
+            <textarea id="description" rows="2" placeholder="NFT_DESCRIPTION_HERE"></textarea>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label>Image Prefix</label>
+                <input type="text" id="imgPrefix" placeholder="Xrpman">
+            </div>
+            <div class="form-group">
+                <label>Extension</label>
+                <select id="ext">
+                    <option value=".png">.PNG</option>
+                    <option value=".gif">.GIF</option>
+                    <option value=".mp4">.MP4</option>
+                    <option value=".webp">.WEBP</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Audio Source (IPFS/URL)</label>
+            <input type="text" id="audio" placeholder="ipfs://...">
+        </div>
+
+        <label>Attribute Protocols</label>
+        <div id="traits-list" class="traits-list"></div>
+        <button class="btn-add" id="addTrait">+ INITIALIZE NEW TRAIT</button>
+
+        <div class="form-group">
+            <label>Quantity to Generate</label>
+            <input type="number" id="count" min="1" placeholder="0">
+        </div>
+
+        <div class="preview-pane">
+            <pre id="jsonPreview"></pre>
+        </div>
+
+        <button id="genBtn" class="btn-main" disabled>EXECUTE BATCH DOWNLOAD</button>
+        <div id="status-bar">SYSTEM_READY</div>
+    </div>
+</div>
+
+<script>
+    const container = document.getElementById('traits-list');
+    const staticFields = ['name', 'description', 'imgPrefix', 'ext', 'audio', 'collection', 'count'];
+
+    function addTraitRow() {
+        const row = document.createElement('div');
+        row.className = 'trait-row';
+        row.innerHTML = `
+            <input type="text" class="t-type" placeholder="Type (Head)">
+            <input type="text" class="t-val" placeholder="Value (Ugly)">
+            <button class="btn-del">X</button>
+        `;
+        row.querySelectorAll('input').forEach(i => i.addEventListener('input', updateUI));
+        row.querySelector('.btn-del').addEventListener('click', () => {
+            row.remove();
+            updateUI();
+        });
+        container.appendChild(row);
+        updateUI();
+    }
+
+    /**
+     * getMetadata defines the object order explicitly 
+     * by creating keys in the specific sequence requested.
+     */
+    function getMetadata(idx) {
+        // Build attributes array
+        const traits = [];
+        document.querySelectorAll('.trait-row').forEach(r => {
+            const type = r.querySelector('.t-type').value;
+            const val = r.querySelector('.t-val').value;
+            if (type || val) {
+                traits.push({ "trait_type": type, "value": val });
+            }
+        });
+
+        // We create a fresh object and add keys in order.
+        // JS engines generally maintain this "insertion order" for string keys.
+        const meta = {};
+        meta.name = `${document.getElementById('name').value} #${idx}`;
+        meta.description = document.getElementById('description').value;
+        meta.image = `${document.getElementById('imgPrefix').value}${idx}${document.getElementById('ext').value}`;
+        meta.audio = document.getElementById('audio').value;
+        meta.collection = { "name": document.getElementById('collection').value };
+        meta.attributes = traits;
+
+        return meta;
+    }
+
+    function updateUI() {
+        const preview = getMetadata(1);
+        document.getElementById('jsonPreview').textContent = JSON.stringify(preview, null, 3);
+        
+        const count = document.getElementById('count').value;
+        const btn = document.getElementById('genBtn');
+        btn.disabled = (!count || count < 1 || !document.getElementById('name').value);
+        
+        document.getElementById('status-bar').textContent = btn.disabled ? "AWAITING_INPUT" : "READY_FOR_SEQUENCING";
+    }
+
+    staticFields.forEach(f => document.getElementById(f).addEventListener('input', updateUI));
+    document.getElementById('addTrait').addEventListener('click', addTraitRow);
+
+    // Default trait
+    addTraitRow();
+
+    document.getElementById('genBtn').addEventListener('click', async () => {
+        const btn = document.getElementById('genBtn');
+        const status = document.getElementById('status-bar');
+        const count = parseInt(document.getElementById('count').value);
+        const zip = new JSZip();
+
+        btn.disabled = true;
+        status.textContent = "SEQUENCING_DATA...";
+
+        try {
+            for(let i=1; i<=count; i++) {
+                const data = getMetadata(i);
+                zip.file(`${i}.json`, JSON.stringify(data, null, 3));
+            }
+            const blob = await zip.generateAsync({type:"blob"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "XRPMAN_NFT_METADATA.zip";
+            a.click();
+            status.textContent = "TRANSMISSION_SUCCESSFUL";
+        } catch(e) {
+            status.textContent = "CRITICAL_ERROR";
+            console.error(e);
+        } finally {
+            btn.disabled = false;
+        }
+    });
+</script>
+
+</body>
+</html>
+
