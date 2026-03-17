@@ -10,7 +10,7 @@
             --neon-green: #00FF00;
             --neon-blue: #00F0FF;
             --dark-bg: #050a05;
-            --card-bg: rgba(0, 0, 0, 0.7);
+            --card-bg: rgba(0, 0, 0, 0.8);
             --input-bg: #000;
         }
 
@@ -26,61 +26,114 @@
             align-items: center;
             padding: 20px;
             background-image: radial-gradient(circle at top, #001a00 0%, #050a05 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Music Note Background Effect */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
         }
 
         .hud-container {
             width: 100%;
             max-width: 650px;
             padding-bottom: 200px;
+            position: relative;
+            z-index: 1;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         .header h1 { 
             margin: 0; 
-            letter-spacing: 4px; 
-            font-size: 1.4rem; 
+            letter-spacing: 2px; 
+            font-size: 1.6rem; 
             color: var(--neon-green);
             text-shadow: 0 0 10px var(--neon-green);
+            text-transform: uppercase;
+        }
+
+        .header p {
+            margin: 5px 0 10px 0;
+            color: var(--neon-green);
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            font-weight: 800;
+            text-transform: uppercase;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
         }
 
         .btn-tutorial {
-            background: transparent;
+            background: rgba(0,0,0,0.5);
             border: 1px solid var(--neon-blue);
             color: var(--neon-blue);
             padding: 8px 15px;
             border-radius: 20px;
             cursor: pointer;
             font-size: 0.7rem;
-            margin-top: 10px;
             font-weight: bold;
             text-transform: uppercase;
+            backdrop-filter: blur(5px);
+            margin-right: 10px;
         }
 
-        #tutorialModal {
+        .btn-tip {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-tip:hover {
+            background: var(--neon-green);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-green);
+        }
+
+        /* Modal Styles */
+        .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             z-index: 1000;
             padding: 20px;
             overflow-y: auto;
         }
 
-        .tutorial-content {
+        .modal-content {
             max-width: 500px;
             margin: 40px auto;
-            background: #111;
+            background: #0a0a0a;
             border: 2px solid var(--neon-green);
             padding: 30px;
             border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
+            text-align: center;
         }
 
-        .tutorial-step { margin-bottom: 25px; }
-        .tutorial-step h3 { color: var(--neon-green); margin-bottom: 5px; }
+        .tutorial-step { margin-bottom: 25px; text-align: left; }
+        .tutorial-step h3 { color: var(--neon-green); margin-bottom: 5px; font-size: 1rem; }
         .tutorial-step p { color: #ccc; font-size: 0.9rem; line-height: 1.4; }
 
         .section-step {
@@ -96,6 +149,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            text-shadow: 0 0 5px var(--neon-blue);
         }
 
         .card {
@@ -103,6 +157,7 @@
             border: 1px solid rgba(0, 255, 0, 0.2);
             padding: 20px;
             border-radius: 12px;
+            backdrop-filter: blur(10px);
         }
 
         .input-group { margin-bottom: 15px; }
@@ -112,6 +167,7 @@
             font-size: 0.7rem; 
             margin-bottom: 5px; 
             color: #aaa;
+            text-transform: uppercase;
         }
 
         input, textarea, select {
@@ -122,7 +178,10 @@
             padding: 10px;
             border-radius: 8px;
             font-size: 0.9rem;
+            outline: none;
         }
+
+        input:focus { border-color: var(--neon-green); box-shadow: 0 0 10px rgba(0, 255, 0, 0.1); }
 
         .variety-box {
             background: rgba(0, 240, 255, 0.03);
@@ -144,6 +203,7 @@
             color: #ff4444;
             width: 32px; height: 32px;
             cursor: pointer; border-radius: 5px;
+            display: flex; align-items: center; justify-content: center;
         }
 
         .btn-add {
@@ -155,6 +215,7 @@
             cursor: pointer;
             border-radius: 8px;
             font-size: 0.75rem;
+            text-transform: uppercase;
         }
 
         .preview-container {
@@ -179,6 +240,7 @@
             overflow-x: auto;
             max-height: 250px;
             border-left: 3px solid var(--neon-green);
+            box-shadow: inset 0 0 15px rgba(0, 255, 0, 0.05);
         }
 
         .action-footer {
@@ -189,6 +251,7 @@
             padding: 20px;
             text-align: center;
             z-index: 10;
+            backdrop-filter: blur(10px);
         }
 
         .btn-main {
@@ -198,97 +261,186 @@
             background: var(--neon-green);
             border: none;
             border-radius: 10px;
-            font-weight: bold;
+            font-weight: 900;
             cursor: pointer;
             text-transform: uppercase;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            color: #000;
+            transition: all 0.2s;
+        }
+        
+        .btn-main:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px var(--neon-green);
         }
 
-        .btn-main:disabled { background: #222; color: #555; }
+        .btn-main:disabled { background: #1a331a; color: #004400; cursor: not-allowed; }
 
         .math-status {
             font-size: 0.7rem;
             margin-top: 8px;
             color: var(--neon-green);
+            font-weight: bold;
         }
         
         .error-border { border-color: #ff4444 !important; }
 
         .media-notice {
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            color: var(--neon-blue);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            margin-top: 15px;
+            text-align: left;
+            line-height: 1.3;
+        }
+
+        /* Tip Modal Specifics */
+        .qr-container {
+            width: 200px;
+            height: 200px;
+            background: white;
+            margin: 20px auto;
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+        .qr-image {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .address-box {
+            background: #111;
+            padding: 14px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin: 20px 0 10px 0;
+            word-break: break-all;
+            color: var(--neon-blue);
+            line-height: 1.4;
+        }
+        .copy-btn {
             background: rgba(0, 240, 255, 0.1);
             border: 1px solid var(--neon-blue);
             color: var(--neon-blue);
-            padding: 10px;
+            padding: 8px 16px;
             border-radius: 8px;
             font-size: 0.7rem;
-            margin-top: 10px;
-            text-align: left;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: var(--neon-blue);
+            color: #000;
         }
     </style>
 </head>
 <body>
 
-<div id="tutorialModal">
-    <div class="tutorial-content">
-        <h2 style="color: var(--neon-blue); margin-top:0;">🚀 Artist Quick Start</h2>
+<!-- Animated Background -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- Tutorial Modal -->
+<div id="tutorialModal" class="modal">
+    <div class="modal-content">
+        <h2 style="color: var(--neon-blue); margin-top:0; letter-spacing: 1px;">🚀 ARTIST QUICK START</h2>
         <div class="tutorial-step">
-            <h3>1. The Batch</h3>
-            <p>Set your "Batch Size" (e.g., 100). All your quantities must add up to this number.</p>
+            <h3>1. The Batch Size</h3>
+            <p>Enter your total collection size (e.g., 100). Every song and detail you add must have quantities that sum up to this total.</p>
         </div>
         <div class="tutorial-step">
-            <h3>2. Media Folder</h3>
-            <p>The ZIP you download will have a <b>media</b> folder. Once you download, move your actual image/video files into that folder before uploading to a marketplace.</p>
+            <h3>2. The Media Folder</h3>
+            <p>Your download will contain a folder named <b>media</b>. You must manually move your image or video files into this folder after downloading.</p>
         </div>
         <div class="tutorial-step">
-            <h3>3. Live Preview</h3>
-            <p>Look at the bottom of the page. You'll see exactly what your first NFT's code looks like in bright green!</p>
+            <h3>3. Metadata Preview</h3>
+            <p>Check the neon green box at the bottom. It shows exactly what the code for NFT #1 will look like as you build it.</p>
         </div>
-        <button class="btn-main" onclick="closeTutorial()">GOT IT - LET'S GO</button>
+        <button class="btn-main" onclick="closeTutorial()">GET STARTED</button>
+    </div>
+</div>
+
+<!-- Tip Modal -->
+<div id="tipModal" class="modal">
+    <div class="modal-content">
+        <h2 style="color: var(--neon-green); margin-top:0; letter-spacing: 1px;">🪙 TIP THE CREATOR</h2>
+        <p style="font-size: 0.8rem; color: #888;">Support development by tipping XRP</p>
+        
+        <div class="qr-container">
+            <!-- Actual generated QR code for rDg6Q7mTBsVo35cNf6vUSx8uEsDD8Hw7B2 -->
+            <img class="qr-image" src="https://api.qrserver.com/v1/create-qr-code/?size=170x170&data=rDg6Q7mTBsVo35cNf6vUSx8uEsDD8Hw7B2" alt="XRP Wallet QR Code">
+        </div>
+
+        <div class="address-box" id="walletAddress">rDg6Q7mTBsVo35cNf6vUSx8uEsDD8Hw7B2</div>
+        <button class="copy-btn" id="copyBtn" onclick="copyAddress()">Copy XRP Address</button>
+
+        <div style="margin-top: 30px;">
+            <button class="btn-main" onclick="closeTip()">CLOSE</button>
+        </div>
     </div>
 </div>
 
 <div class="hud-container">
     <div class="header">
-        <h1>XRPMAN'S CREATOR</h1>
-        <button class="btn-tutorial" onclick="openTutorial()">📖 HOW DOES THIS WORK?</button>
+        <h1>XRPMAN'S MUSIC NFT CREATOR</h1>
+        <p>POWERED BY XMEME</p>
+        <div style="margin-top: 5px;">
+            <button class="btn-tutorial" onclick="openTutorial()">📖 HOW TO USE</button>
+            <button class="btn-tip" onclick="openTip()">
+                🪙 TIP XRPMAN
+            </button>
+        </div>
     </div>
 
+    <!-- ... rest of the UI steps ... -->
     <div class="section-step">
-        <div class="step-label">Step 1: The Collection</div>
+        <div class="step-label">Step 1: Collection Identity</div>
         <div class="card">
             <div class="input-group">
                 <label>Project Name</label>
-                <input type="text" id="name" placeholder="e.g. My First Drop" oninput="updatePreview()">
+                <input type="text" id="name" placeholder="e.g. Neon Soul" oninput="updatePreview()">
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div class="input-group">
-                    <label>Batch Size</label>
+                    <label>Total Batch Size</label>
                     <input type="number" id="count" value="10" oninput="validateAll()">
                 </div>
                 <div class="input-group">
-                    <label>Collection Name</label>
-                    <input type="text" id="collection" placeholder="Optional" oninput="updatePreview()">
+                    <label>Collection (Optional)</label>
+                    <input type="text" id="collection" placeholder="XMEME Series" oninput="updatePreview()">
                 </div>
             </div>
             <div class="input-group">
                 <label>Global Description</label>
-                <textarea id="description" rows="2" placeholder="Tell the story..." oninput="updatePreview()"></textarea>
+                <textarea id="description" rows="2" placeholder="Tell the world about this drop..." oninput="updatePreview()"></textarea>
             </div>
         </div>
     </div>
 
     <div class="section-step">
-        <div class="step-label">Step 2: Music Links</div>
+        <div class="step-label">Step 2: Music Assets</div>
         <div class="card" id="audio-card">
             <div id="audio-list"></div>
-            <button class="btn-add" onclick="addAudioRow()">+ Add Rare/Alternative Song</button>
-            <div id="audio-math" class="math-status">Assigned: 0 / 10</div>
+            <button class="btn-add" onclick="addAudioRow()">+ Add Alternative Song Variety</button>
+            <div id="audio-math" class="math-status">Assigned Songs: 0 / 10</div>
             
             <div style="margin-top: 20px;">
                 <label>Image Prefix</label>
                 <input type="text" id="imgPrefix" placeholder="Art_" oninput="updatePreview()">
             </div>
             <div class="media-notice">
-                <b>Note:</b> After downloading, place your actual image/video files (matching the prefix) into the <b>/media</b> folder.
+                <b>IMPORTANT:</b> Place your actual art/video files (e.g. <i>Art_1.png</i>) inside the <b>media/</b> folder in your final project ZIP.
             </div>
         </div>
     </div>
@@ -296,7 +448,7 @@
     <div class="section-step">
         <div class="step-label">Step 3: Rarity Details</div>
         <div id="traits-container"></div>
-        <button class="btn-add" style="border-style: solid; border-color: var(--neon-green); color: var(--neon-green);" onclick="addTraitBox()">+ Add A Detail</button>
+        <button class="btn-add" style="border-style: solid; border-color: var(--neon-green); color: var(--neon-green);" onclick="addTraitBox()">+ Add A Rarity Trait</button>
     </div>
 
     <div class="preview-container">
@@ -306,11 +458,90 @@
 </div>
 
 <div class="action-footer">
-    <button id="genBtn" class="btn-main" disabled>DOWNLOAD ZIP</button>
-    <div id="statusText" class="math-status">Please fix quantities to match Batch Size</div>
+    <button id="genBtn" class="btn-main" disabled>DOWNLOAD PROJECT ZIP</button>
+    <div id="statusText" class="math-status">MATH MISMATCH: Check your quantities</div>
 </div>
 
 <script>
+    // Tip logic
+    function openTip() { document.getElementById('tipModal').style.display = 'block'; }
+    function closeTip() { document.getElementById('tipModal').style.display = 'none'; }
+    
+    function copyAddress() {
+        const addr = document.getElementById('walletAddress').innerText;
+        const textArea = document.createElement("textarea");
+        textArea.value = addr;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            const btn = document.getElementById('copyBtn');
+            const originalText = btn.innerText;
+            btn.innerText = "COPIED TO CLIPBOARD!";
+            btn.style.color = "var(--neon-green)";
+            btn.style.borderColor = "var(--neon-green)";
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.color = "var(--neon-blue)";
+                btn.style.borderColor = "var(--neon-blue)";
+            }, 2000);
+        } catch (err) {
+            console.error('Copy failed', err);
+        }
+        document.body.removeChild(textArea);
+    }
+
+    // Background Animation Logic
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let notes = [];
+    const noteChars = ['♩', '♪', '♫', '♬', '♭', '♮', '♯'];
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+    class MusicNote {
+        constructor() { this.reset(); }
+        reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = canvas.height + 50;
+            this.char = noteChars[Math.floor(Math.random() * noteChars.length)];
+            this.size = Math.random() * 20 + 10;
+            this.speed = Math.random() * 2 + 0.5;
+            this.opacity = Math.random() * 0.4 + 0.1;
+            this.drift = Math.random() * 1 - 0.5;
+        }
+        update() {
+            this.y -= this.speed;
+            this.x += this.drift;
+            if (this.y < -50) this.reset();
+        }
+        draw() {
+            ctx.fillStyle = `rgba(0, 255, 0, ${this.opacity})`;
+            ctx.font = `${this.size}px serif`;
+            ctx.fillText(this.char, this.x, this.y);
+        }
+    }
+
+    function initNotes() {
+        notes = [];
+        for (let i = 0; i < 40; i++) notes.push(new MusicNote());
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        notes.forEach(note => { note.update(); note.draw(); });
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    initNotes();
+    animate();
+
+    // App Logic
     function openTutorial() { document.getElementById('tutorialModal').style.display = 'block'; }
     function closeTutorial() { document.getElementById('tutorialModal').style.display = 'none'; }
 
@@ -319,7 +550,7 @@
         row.className = 'variety-row';
         row.innerHTML = `
             <input type="text" class="audio-url" placeholder="ipfs://..." oninput="updatePreview()">
-            <input type="number" class="audio-qty" placeholder="Qty" style="width: 70px;" oninput="validateAll()">
+            <input type="number" class="audio-qty" placeholder="Qty" style="width: 75px;" oninput="validateAll()">
             <button class="btn-icon" onclick="this.parentElement.remove(); validateAll();">✕</button>
         `;
         document.getElementById('audio-list').appendChild(row);
@@ -331,7 +562,7 @@
         box.className = 'variety-box';
         box.innerHTML = `
             <div style="display:flex; gap:10px; margin-bottom:10px;">
-                <input type="text" class="t-name" placeholder="Detail Name" oninput="updatePreview()">
+                <input type="text" class="t-name" placeholder="Detail Name (e.g. Genre)" oninput="updatePreview()">
                 <button class="btn-icon" onclick="this.closest('.variety-box').remove(); validateAll();">✕</button>
             </div>
             <div class="v-list"></div>
@@ -347,7 +578,7 @@
         row.className = 'variety-row';
         row.innerHTML = `
             <input type="text" class="v-val" placeholder="Value" oninput="updatePreview()">
-            <input type="number" class="v-qty" placeholder="Qty" style="width: 70px;" oninput="validateAll()">
+            <input type="number" class="v-qty" placeholder="Qty" style="width: 75px;" oninput="validateAll()">
             <button class="btn-icon" onclick="this.parentElement.remove(); validateAll();">✕</button>
         `;
         btn.previousElementSibling.appendChild(row);
@@ -359,9 +590,7 @@
         const desc = document.getElementById('description').value || "";
         const prefix = document.getElementById('imgPrefix').value || "Art_";
         const coll = document.getElementById('collection').value || "";
-        
         const firstAudio = document.querySelector('.audio-url')?.value || "ipfs://...";
-        
         const attrs = [];
         document.querySelectorAll('.variety-box').forEach(box => {
             const tName = box.querySelector('.t-name').value || "Trait Name";
@@ -378,7 +607,6 @@
             attributes: attrs,
             compiler: "XRPMAN XMEME CREATOR"
         };
-
         document.getElementById('json-preview').textContent = JSON.stringify(previewObj, null, 4);
         validateAll();
     }
@@ -386,32 +614,23 @@
     function validateAll() {
         const target = parseInt(document.getElementById('count').value) || 0;
         let valid = true;
-
         let aTotal = 0;
         document.querySelectorAll('.audio-qty').forEach(i => aTotal += parseInt(i.value) || 0);
         document.getElementById('audio-math').textContent = `Assigned Songs: ${aTotal} / ${target}`;
-        if(aTotal !== target) {
-            valid = false;
-            document.getElementById('audio-card').classList.add('error-border');
-        } else {
-            document.getElementById('audio-card').classList.remove('error-border');
-        }
+        if(aTotal !== target) { valid = false; document.getElementById('audio-card').classList.add('error-border'); }
+        else { document.getElementById('audio-card').classList.remove('error-border'); }
 
         document.querySelectorAll('.variety-box').forEach(box => {
             let tTotal = 0;
             box.querySelectorAll('.v-qty').forEach(i => tTotal += parseInt(i.value) || 0);
             box.querySelector('.trait-math').textContent = `Assigned Details: ${tTotal} / ${target}`;
-            if(tTotal !== target) {
-                valid = false;
-                box.classList.add('error-border');
-            } else {
-                box.classList.remove('error-border');
-            }
+            if(tTotal !== target) { valid = false; box.classList.add('error-border'); }
+            else { box.classList.remove('error-border'); }
         });
 
         const btn = document.getElementById('genBtn');
         btn.disabled = !valid || !document.getElementById('name').value;
-        document.getElementById('statusText').textContent = valid ? "MATH MATCHES! ZIP WILL INCLUDE /MEDIA FOLDER." : "QUANTITIES MUST MATCH BATCH SIZE";
+        document.getElementById('statusText').textContent = valid ? "ALL MATH MATCHES! READY TO EXPORT" : "TOTAL QUANTITIES MUST MATCH BATCH SIZE";
         document.getElementById('statusText').style.color = valid ? "var(--neon-green)" : "#ff4444";
     }
 
@@ -420,12 +639,9 @@
         const total = parseInt(document.getElementById('count').value);
         const projName = document.getElementById('name').value;
         const prefix = document.getElementById('imgPrefix').value || "Art_";
-        
         const root = zip.folder(projName.replace(/\s+/g, '_'));
         const meta = root.folder("metadata");
-        
-        // CREATE EMPTY MEDIA FOLDER
-        root.folder("media");
+        root.folder("media"); 
 
         const audioPool = [];
         document.querySelectorAll('#audio-list .variety-row').forEach(row => {
@@ -466,14 +682,14 @@
         const content = await zip.generateAsync({type:"blob"});
         const link = document.createElement('a');
         link.href = URL.createObjectURL(content);
-        link.download = `${projName}.zip`;
+        link.download = `${projName}_Project.zip`;
         link.click();
     });
 
     addAudioRow();
     addTraitBox();
     updatePreview();
-    if(!localStorage.getItem('tutorialSeen')) { openTutorial(); localStorage.setItem('tutorialSeen', 'true'); }
+    if(!localStorage.getItem('tutorialSeenV6')) { openTutorial(); localStorage.setItem('tutorialSeenV6', 'true'); }
 </script>
 
 </body>
